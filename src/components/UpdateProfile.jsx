@@ -1,10 +1,9 @@
-import { A } from '@solidjs/router';
 import { Show } from 'solid-js';
 import { getAuth, updateProfile } from '@firebase/auth';
-import firebase_app from '../lib/firebase';
+import { firebaseApp } from '../lib/firebase';
 import { useAuth } from '../lib/AuthContext';
 
-const auth = getAuth(firebase_app);
+const auth = getAuth(firebaseApp);
 
 export default function UpdateProfile() {
 	const { user } = useAuth();

@@ -1,8 +1,8 @@
 import { createContext, createEffect, createSignal, useContext } from 'solid-js';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
-import firebase_app from '../lib/firebase';
+import { firebaseApp } from '../lib/firebase';
 
-const auth = getAuth(firebase_app);
+const auth = getAuth(firebaseApp);
 
 const AuthContext = createContext();
 

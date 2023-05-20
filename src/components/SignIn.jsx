@@ -1,10 +1,11 @@
 import { A } from '@solidjs/router';
 import { Show } from 'solid-js';
 import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
-import firebase_app from '../lib/firebase';
+import { firebaseApp } from '../lib/firebase';
 import { useAuth } from '../lib/AuthContext';
+import { timedToast } from './CustomToast';
 
-const auth = getAuth(firebase_app);
+const auth = getAuth(firebaseApp);
 
 export default function SignIn() {
 	const { user } = useAuth();
@@ -13,7 +14,13 @@ export default function SignIn() {
 		event.preventDefault();
 
 		try {
-			await signInWithEmailAndPassword(auth, event.target[0].value, event.target[1].value);
+			const result = await signInWithEmailAndPassword(
+				auth,
+				event.target[0].value,
+				event.target[1].value
+			);
+
+			timedToast(`Welcome back, ${result.user.displayName}!`);
 		} catch (error) {
 			console.error(error);
 			throw new Error(error);

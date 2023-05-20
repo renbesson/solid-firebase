@@ -1,13 +1,15 @@
 import { Show } from 'solid-js';
 import { getAuth, signOut } from 'firebase/auth';
-import firebase_app from '../lib/firebase';
+import { firebaseApp } from '../lib/firebase';
 import { useAuth } from '../lib/AuthContext';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import UpdateProfile from './UpdateProfile';
 import { A } from '@solidjs/router';
+import { timedToast } from './CustomToast';
+import Loading from './Loading';
 
-const auth = getAuth(firebase_app);
+const auth = getAuth(firebaseApp);
 
 export default function AppBar({ children }) {
 	const { user, loading } = useAuth();
@@ -17,8 +19,9 @@ export default function AppBar({ children }) {
 
 		try {
 			await signOut(auth);
+			timedToast(`Signed Out Successfully!`);
 		} catch (error) {
-			error = error;
+			timedToast(`${error.message}!`);
 			console.error(error);
 		}
 	};
@@ -55,7 +58,7 @@ export default function AppBar({ children }) {
 	];
 
 	return (
-		<>
+		<Show when={!loading()} fallback={<Loading />}>
 			<SignIn />
 			<SignUp />
 			<UpdateProfile />
@@ -81,7 +84,9 @@ export default function AppBar({ children }) {
 							</svg>
 						</label>
 						<div className='flex-1'>
-							<a className='btn btn-ghost normal-case text-xl'>daisyUI</a>
+							<A className='btn btn-ghost normal-case text-xl' href='/'>
+								daisyUI
+							</A>
 						</div>
 						<div className='flex-1 hidden md:block'>
 							{MenuItems.map(({ text, link }) => (
@@ -124,6 +129,6 @@ export default function AppBar({ children }) {
 					</ul>
 				</div>
 			</div>
-		</>
+		</Show>
 	);
 }
